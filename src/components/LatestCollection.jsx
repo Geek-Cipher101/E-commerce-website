@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { ShopContext } from "../context/ShopContext";
-import Title from "./Title";
-import ProductItem from "./ProductItem";
+import React, { useContext, useState, useEffect } from 'react';
+import { ShopContext } from '../context/ShopContext';
+import Title from './Title';
+import ProductItem from './ProductItem';
 
 const LatestCollection = () => {
   const { products } = useContext(ShopContext);
@@ -16,13 +16,15 @@ const LatestCollection = () => {
   return (
     <div className="my-10">
       <div className="text-center py-8 text-3xl">
-        <Title text1={"LATEST"} text2={"COLLECTIONS"} />
+        <Title
+          text1={'LATEST'}
+          text2={'COLLECTIONS'}
+        />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-          We will build the admin dashboard of this eCommerce website so that
-          admin can upload the project, delete the product or check all products
-          added on the store. We will build this eCommerce backend project /
-          Backend API's using Node.js and Express and all products, user and
-          order data will be stored on MongoDB database.
+          We will build the admin dashboard of this eCommerce website so that admin can upload the
+          project, delete the product or check all products added on the store. We will build this
+          eCommerce backend project / Backend API's using Node.js and Express and all products, user
+          and order data will be stored on MongoDB database.
         </p>
       </div>
       {/* Rendering Products */}

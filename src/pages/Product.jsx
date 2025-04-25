@@ -28,10 +28,10 @@ const Product = () => {
         {/* Product Images */}
         <div className="grid grid-cols-2 gap-4">
           {product.image.map((img, index) => (
-            <img 
-              key={index} 
-              src={img} 
-              alt={`${product.name} ${index + 1}`} 
+            <img
+              key={index}
+              src={img}
+              alt={`${product.name} ${index + 1}`}
               className="w-full h-64 object-cover"
             />
           ))}
@@ -65,14 +65,14 @@ const Product = () => {
           <div className="mb-6">
             <h3 className="font-medium mb-2">Quantity</h3>
             <div className="flex items-center gap-2">
-              <button 
+              <button
                 onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
                 className="px-2 py-1 border rounded"
               >
                 -
               </button>
               <span>{quantity}</span>
-              <button 
+              <button
                 onClick={() => setQuantity(prev => prev + 1)}
                 className="px-2 py-1 border rounded"
               >

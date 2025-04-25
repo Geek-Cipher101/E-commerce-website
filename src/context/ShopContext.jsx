@@ -1,10 +1,10 @@
-import { createContext, useState } from "react";
-import { products } from "../assets/assets";
+import { createContext, useState } from 'react';
+import { products } from '../assets/assets';
 
 export const ShopContext = createContext();
 
-const ShopContextProvider = (props) => {
-  const currency = "₹";
+const ShopContextProvider = props => {
+  const currency = '₹';
   const delivery_fee = 50;
   const [search, setSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false);
@@ -15,26 +15,20 @@ const ShopContextProvider = (props) => {
     setCartItems(prev => {
       const existingItem = prev.find(item => item.id === productId);
       if (existingItem) {
-        return prev.map(item => 
-          item.id === productId 
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+        return prev.map(item =>
+          item.id === productId ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
       return [...prev, { id: productId, quantity }];
     });
   };
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = productId => {
     setCartItems(prev => prev.filter(item => item.id !== productId));
   };
 
   const updateCartItemQuantity = (productId, quantity) => {
-    setCartItems(prev => 
-      prev.map(item => 
-        item.id === productId ? { ...item, quantity } : item
-      )
-    );
+    setCartItems(prev => prev.map(item => (item.id === productId ? { ...item, quantity } : item)));
   };
 
   const getCartTotal = () => {
@@ -48,7 +42,7 @@ const ShopContextProvider = (props) => {
     products,
     currency,
     delivery_fee,
-    search, 
+    search,
     setSearch,
     showSearch,
     setShowSearch,
@@ -58,12 +52,10 @@ const ShopContextProvider = (props) => {
     updateCartItemQuantity,
     getCartTotal,
     user,
-    setUser
+    setUser,
   };
 
-  return (
-    <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
-  );
+  return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
 };
 
 export default ShopContextProvider;
