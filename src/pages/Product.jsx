@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 
 const Product = () => {
@@ -7,11 +7,32 @@ const Product = () => {
   const { products, addToCart } = useContext(ShopContext);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const navigate = useNavigate();
 
   const product = products.find(p => p._id === productId);
 
+  useEffect(() => {
+    if (addedToCart) {
+      const timer = setTimeout(() => {
+        setAddedToCart(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [addedToCart]);
+
   if (!product) {
-    return <div className="text-center py-8">Product not found</div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <h2 className="text-2xl font-bold mb-4">Product not found</h2>
+        <button
+          onClick={() => navigate('/collection')}
+          className="px-4 py-2 bg-black text-white"
+        >
+          Back to Collection
+        </button>
+      </div>
+    );
   }
 
   const handleAddToCart = () => {
@@ -20,14 +41,20 @@ const Product = () => {
       return;
     }
     addToCart(productId, quantity);
+    setAddedToCart(true);
   };
+
+  // Handle missing properties safely
+  const productImages = Array.isArray(product.image) ? product.image : [product.image];
+  const productSizes = Array.isArray(product.sizes) ? product.sizes : ['S', 'M', 'L', 'XL'];
+  const productDescription = product.description || 'No description available';
 
   return (
     <div className="py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product Images */}
         <div className="grid grid-cols-2 gap-4">
-          {product.image.map((img, index) => (
+          {productImages.map((img, index) => (
             <img
               key={index}
               src={img}
@@ -40,19 +67,19 @@ const Product = () => {
         {/* Product Details */}
         <div>
           <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-          <p className="text-gray-500 mb-4">{product.description}</p>
+          <p className="text-gray-500 mb-4">{productDescription}</p>
           <p className="text-xl font-bold mb-4">₹{product.price}</p>
 
           {/* Size Selection */}
           <div className="mb-4">
             <h3 className="font-medium mb-2">Select Size</h3>
             <div className="flex gap-2">
-              {product.sizes.map(size => (
+              {productSizes.map(size => (
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
                   className={`px-4 py-2 border ${
-                    selectedSize === size ? 'bg-black text-white' : ''
+                    selectedSize === size ? 'bg-black text-white' : 'hover:bg-gray-100'
                   }`}
                 >
                   {size}
@@ -67,14 +94,14 @@ const Product = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                className="px-2 py-1 border rounded"
+                className="px-2 py-1 border rounded hover:bg-gray-100"
               >
                 -
               </button>
-              <span>{quantity}</span>
+              <span className="px-4">{quantity}</span>
               <button
                 onClick={() => setQuantity(prev => prev + 1)}
-                className="px-2 py-1 border rounded"
+                className="px-2 py-1 border rounded hover:bg-gray-100"
               >
                 +
               </button>
@@ -84,9 +111,11 @@ const Product = () => {
           {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            className="w-full bg-black text-white py-3"
+            className={`w-full py-3 ${
+              addedToCart ? 'bg-green-600' : 'bg-black'
+            } text-white transition-colors`}
           >
-            Add to Cart
+            {addedToCart ? 'Added to Cart!' : 'Add to Cart'}
           </button>
         </div>
       </div>

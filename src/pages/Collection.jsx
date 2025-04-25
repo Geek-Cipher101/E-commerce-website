@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../assets/assets';
@@ -6,7 +6,7 @@ import Title from '../components/Title';
 import ProductItem from '../components/ProductItem';
 
 const Collection = () => {
-  const { products } = useContext(ShopContext);
+  const { products , search , showSearch } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
@@ -26,16 +26,35 @@ const Collection = () => {
     );
   };
 
+  const applyFilter = () => {
+    // Apply filtering logic here if needed
+    console.log('Filters applied');
+  };
+
+  const sortProduct = () => {
+    // Apply sorting logic here if needed
+    console.log('Products sorted');
+  };
+
+  useEffect(() => {
+    applyFilter();
+  }, [category, subCategory, search, showSearch]);
+
+  useEffect(() => {
+    sortProduct();
+  }, [sortType]);
+
   // Memoize filtered products to prevent unnecessary recalculations
   const filteredProducts = useMemo(() => {
     if (!products) return [];
 
     return products.filter(item => {
+      const matchesSearch = !showSearch || !search || item.name.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = category.length === 0 || category.includes(item.category);
       const matchesSubCategory = subCategory.length === 0 || subCategory.includes(item.subCategory);
-      return matchesCategory && matchesSubCategory;
+      return matchesSearch && matchesCategory && matchesSubCategory;
     });
-  }, [products, category, subCategory]);
+  }, [products, category, subCategory, showSearch, search]);
 
   // Memoize sorted products
   const sortedProducts = useMemo(() => {
